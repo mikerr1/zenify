@@ -1,12 +1,12 @@
 import os.path
 import pickle
 import time
-from src.utils import hash_url
+from zenify.utils import hash_url
 import os.path
 import pickle
 import time
 
-from src.utils import hash_url
+from zenify.utils import hash_url
 
 
 class Cache:

@@ -1,9 +1,9 @@
 from settings import *
 from headers import cookies, headers, params
 
-from src.utils import initiate_logger
-from src.cache import Cache
-from src.scraper import Scraper
+from zenify.utils import initiate_logger
+from zenify.cache import Cache
+from zenify.scraper import Scraper
 
 logger = initiate_logger("scraper")
 

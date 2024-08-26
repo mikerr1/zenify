@@ -2,9 +2,9 @@ import time
 
 from requests import Request, Session
 
-from src.utils import initiate_logger
-from src import Zenify
-from src.cache import Cache
+from zenify.utils import initiate_logger
+from zenify import Zenify
+from zenify.cache import Cache
 
 
 class Scraper(Zenify):
