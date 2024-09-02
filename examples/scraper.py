@@ -14,6 +14,8 @@ with open("input.csv", "r") as f:
 urls = [f"https://api.prod.zoro.com/catalog/v1/catalog/product?zoroNos={product_id}&shallow=false&nonLive=false" for
         product_id in products]
 
+
+
 # Initialize zenify scraper
 scraper = Scraper(name=domain_name)
 
@@ -21,7 +23,8 @@ scraper = Scraper(name=domain_name)
 scraper.set_parameters(cookies=cookies, headers=headers, params=params)
 
 # Registers the urls in scraper
-[scraper.feed_url(url) for url in urls]
+for url in urls:
+    scraper.add_url(url)
 
 # Prepare requests
 scraper.prepare_requests(method="GET")
@@ -35,3 +38,6 @@ scraper.set_cache(cache)
 
 # Start scraping
 scraper.run()
+
+[print(k, v, "\n") for k, v in scraper.__dict__.items()]
+exit()

@@ -28,4 +28,4 @@ def resolve_path():
 
 
 resolve_path()
-print(sys.path)
+# print(sys.path)
