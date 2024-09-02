@@ -1,10 +1,8 @@
 import os.path
 import pickle
 import time
-from zenify.utils import hash_url
-import os.path
-import pickle
-import time
+
+from requests import Request, Session, PreparedRequest
 
 from zenify.utils import hash_url
 
@@ -22,7 +20,7 @@ class Cache:
             os.mkdir(directory)
         self.__directory = directory
 
-    def exists(self, request):
+    def exists(self, request: PreparedRequest):
         url = request.__dict__["url"]
         filename = ".".join([hash_url(url), "pkl"])
 
@@ -30,10 +28,8 @@ class Cache:
             return True
 
     def is_expire(self, request):
-        url = request.__dict__["url"]
-        filename = ".".join([hash_url(url), "pkl"])
 
-        data = self._read_cache(request)
+        data = self.read(request)
 
         now = int(time.time())
 
@@ -41,7 +37,7 @@ class Cache:
             return True
         return False
 
-    def _read_cache(self, request):
+    def read(self, request):
 
         url = request.__dict__["url"]
         filename = ".".join([hash_url(url), "pkl"])
@@ -51,7 +47,7 @@ class Cache:
 
         return data
 
-    def cache_request_and_response(self, request, response):
+    def save(self, request, response):
         url = request.__dict__["url"]
         data = {
             "timestamp": int(time.time()),

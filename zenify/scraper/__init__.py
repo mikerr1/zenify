@@ -11,6 +11,7 @@ class Scraper(Zenify):
 
     def __init__(self, name: str = "Default"):
         super().__init__()
+        self.name = name
 
         self.__name: str | None = None
         self.__domain: str | None = None
@@ -26,11 +27,7 @@ class Scraper(Zenify):
         self.__scrape_status = []
 
         self.__cache: Cache | None = None
-
-        self.__logger = None
-
         self.__logger = initiate_logger("zenify")
-        self.name = name
         self.__logger.info(f"Scraper {self.name} created")
 
     def set_cache(self, cache: Cache | None = None):
@@ -57,6 +54,9 @@ class Scraper(Zenify):
 
     def get_session(self):
         return self.__session
+
+    def get_prepared_requests(self):
+        return self.__prepared_requests
 
     def prepare_requests(self,
                          method,
@@ -91,35 +91,33 @@ class Scraper(Zenify):
 
         s = self.__create_session() if not self.__session else self.__session
 
-        while True:
+        self.__logger.info("Restarting loop...")
 
-            self.__logger.info("Restarting loop...")
+        for request in self.__prepared_requests:
 
-            for request in self.__prepared_requests:
+            try:
+                # check if cache exists for this url
+                if self.__cache.exists(request) and not self.__cache.is_expire(request):
+                    self.__logger.info(f"Cache found .... skipping to next url")
+                    time.sleep(0.25)
+                    continue
+                else:
+                    self.__logger.info(f"An expire cache found, refreshing the cache")
 
-                try:
-                    # check if cache exists for this url
-                    if self.__cache.exists(request) and not self.__cache.is_expire(request):
-                        self.__logger.info(f"Cache found .... skipping to next url")
-                        time.sleep(0.5)
-                        continue
-                    else:
-                        self.__logger.info(f"An expire cache found, refreshing the cache")
+                response = s.send(request, timeout=timeout)
 
-                    response = s.send(request, timeout=timeout)
+                self.__logger.info(f"Scrapping {request}")
+                if response.status_code == 200:
+                    self.__logger.info(f"Scrape {request} status is success")
 
-                    self.__logger.info(f"Scrapping {request}")
-                    if response.status_code == 200:
-                        self.__logger.info(f"Scrape {request} status is success")
+                    self.__cache.save(request, response)
 
-                        self.__cache.cache_request_and_response(request, response)
-
-                except ConnectionError as e:
-                    self.__logger.info(e)
-
-                time.sleep(slow_down)
+            except ConnectionError as e:
+                self.__logger.info(e)
 
             time.sleep(slow_down)
+
+        time.sleep(slow_down)
 
     def __save_to_csv(self, filename):
         pass

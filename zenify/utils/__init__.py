@@ -12,7 +12,7 @@ def initiate_logger(name, enable_debug=False):
         logging.root.setLevel(logging.INFO)
     logging.basicConfig(
         level=logging.NOTSET,
-        format="%(asctime)s %(name)s %(levelname)8s: %(message)s",
+        format="[%(asctime)s] [%(levelname)s] [%(name)s]: %(message)s",
         datefmt="%Y/%m/%d %H:%M:%S",
         stream=sys.stdout)
 

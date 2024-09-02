@@ -8,7 +8,7 @@ domain_name = "zoro.com"
 # Cache lifetime in seconds.
 # Scraped data will be cached and have n (seconds) lifetime
 # Set to 3600 for hourly cache
-cache_lifetime = 120
+cache_lifetime = 10
 
 cache_directory_name = "cache"
 
