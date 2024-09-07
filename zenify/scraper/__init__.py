@@ -4,7 +4,7 @@ from requests import Request, Session
 
 from zenify.utils import initiate_logger
 from zenify import Zenify
-from zenify.cache import Cache
+from zenify.cache import ZCache
 
 
 class Scraper(Zenify):
@@ -26,11 +26,11 @@ class Scraper(Zenify):
         self.__prepared_requests = []
         self.__scrape_status = []
 
-        self.__cache: Cache | None = None
+        self.__cache: ZCache | None = None
         self.__logger = initiate_logger("zenify")
         self.__logger.info(f"Scraper {self.name} created")
 
-    def set_cache(self, cache: Cache | None = None):
+    def set_cache(self, cache: ZCache | None = None):
         if cache is not None:
             self.__cache = cache
 

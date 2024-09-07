@@ -4,14 +4,20 @@ import hashlib
 from datetime import datetime
 
 
-def initiate_logger(name, enable_debug=False):
+def initiate_logger(name,
+                    enable_debug=False):
     # logging.basicConfig()
     if enable_debug:
         logging.root.setLevel(logging.NOTSET)
+        level = logging.NOTSET
     else:
         logging.root.setLevel(logging.INFO)
+        level = logging.INFO
+
+
+
     logging.basicConfig(
-        level=logging.NOTSET,
+        level=level,
         format="[%(asctime)s] [%(levelname)s] [%(name)s]: %(message)s",
         datefmt="%Y/%m/%d %H:%M:%S",
         stream=sys.stdout)

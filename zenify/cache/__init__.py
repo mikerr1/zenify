@@ -5,9 +5,10 @@ import time
 from requests import Request, Session, PreparedRequest
 
 from zenify.utils import hash_url
+from zenify.collection.item import CollectionItem
 
 
-class Cache:
+class ZCache:
 
     def __init__(self, cache_lifetime: int | None = 3600):
         self.__lifetime = cache_lifetime
@@ -20,32 +21,47 @@ class Cache:
             os.mkdir(directory)
         self.__directory = directory
 
-    def exists(self, request: PreparedRequest):
+    @property
+    def directory(self):
+        return self.__directory
+
+    def exists(self, request: PreparedRequest) -> bool:
         url = request.__dict__["url"]
         filename = ".".join([hash_url(url), "pkl"])
 
-        if os.path.exists(os.path.join(self.__directory, filename)):
+        if os.path.exists(os.path.join(self.get_dir(), filename)):
             return True
+        return False
 
-    def is_expire(self, request):
-
+    def is_expire(self, request: PreparedRequest) -> bool:
         data = self.read(request)
-
         now = int(time.time())
 
         if now - data["timestamp"] > self.__lifetime:
             return True
         return False
 
-    def read(self, request):
-
+    def read(self, request: PreparedRequest):
         url = request.__dict__["url"]
         filename = ".".join([hash_url(url), "pkl"])
 
-        with open(os.path.join(self.__directory, filename), "rb") as f:
+        with open(os.path.join(self.get_dir(), filename), "rb") as f:
             data = pickle.load(f)
-
         return data
+
+    @staticmethod
+    def save_item(item: CollectionItem):
+        url = str(item.url)
+        filename = ".".join([hash_url(url), "pkl"])
+        directory = item.cache_dir
+
+        # print(directory, filename)
+        # print(len(item.response.content))
+
+        with open(os.path.join(directory, filename), "wb") as f:
+
+            pickle.dump(item, f)
+
 
     def save(self, request, response):
         url = request.__dict__["url"]
@@ -58,5 +74,8 @@ class Cache:
 
         filename = ".".join([hash_url(url), "pkl"])
 
-        with open(os.path.join(self.__directory, filename), "wb") as f:
+        with open(os.path.join(self.get_dir(), filename), "wb") as f:
             pickle.dump(data, f)
+
+    def get_dir(self):
+        return self.__directory if self.__directory is not None else ""

@@ -7,14 +7,17 @@ class ZenRequest:
                  url=None,
                  cookies=None,
                  headers=None,
-                 params=None):
+                 params=None,
+                 json=None,
+                 data=None):
         super().__init__()
 
         self.__request = Request(method=method,
                                  url=url,
                                  cookies=cookies,
                                  headers=headers,
-                                 params=params)
+                                 params=params,
+                                 json=json)
 
         self.__prepared = self.__request.prepare()
 
