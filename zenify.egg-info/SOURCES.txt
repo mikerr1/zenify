@@ -1,0 +1,7 @@
+LICENSE
+setup.py
+zenify/__init__.py
+zenify.egg-info/PKG-INFO
+zenify.egg-info/SOURCES.txt
+zenify.egg-info/dependency_links.txt
+zenify.egg-info/top_level.txt
