@@ -1,13 +1,5 @@
 from setuptools import setup
-
-setup(
-    name='zenify',
-    version='0.0.1',
-    description='data scraping framework',
-    packages=['zenify']
-)
-
-from distutils.core import setup
+# from distutils.core import setup
 setup(
   name = 'zenify',         # How you named your package folder (MyLib)
   packages = ['zenify'],   # Chose the same as "name"
