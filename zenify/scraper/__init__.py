@@ -110,7 +110,7 @@ class Scraper(Zenify):
                 if response.status_code == 200:
                     self.__logger.info(f"Scrape {request} status is success")
 
-                    self.__cache.save(request, response)
+                    self.__cache.save_request_response(request, response)
 
             except ConnectionError as e:
                 self.__logger.info(e)

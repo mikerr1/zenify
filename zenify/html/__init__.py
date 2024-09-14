@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup
 
-def clean(html=None):
+def clean(html: str) -> str:
     soup = BeautifulSoup(html, 'lxml')
     # Remove script tags
     for script in soup.find_all('script'):

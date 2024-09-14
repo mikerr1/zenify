@@ -1,6 +1,5 @@
 from requests import Request
 
-
 class ZenRequest:
     def __init__(self,
                  method=None,
@@ -10,7 +9,6 @@ class ZenRequest:
                  params=None,
                  json=None,
                  data=None):
-        super().__init__()
 
         self.__request = Request(method=method,
                                  url=url,

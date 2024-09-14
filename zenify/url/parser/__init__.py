@@ -1,35 +1,26 @@
-from urllib.parse import urlparse, urlunparse
-from zenify.url import Url
+import re
 
-class TribunNewsUrlParser():
-    name = "tribunnews"
-    main_url = "https://tribunnews.com"
+class UrlParser():
+    def __init__(self):
+        self.__logger = None
+        self.name = None
+        self.main_url = None
+        self.url_regex_list = []
+
+    def find_matching_regex(self, url: str):
+        patterns = self.url_regex_list
+        for pattern in patterns:
+            if re.match(pattern, url):
+                self.logger.debug(f"MATCHED {url} {pattern}")
+                return pattern
+        self.logger.debug(f"NOT MATCHED {url}")
+        return None
 
     @property
-    def article_url_regex(self):
-        return r"^.*/\d{4}/\d{2}/\d{2}/.*$"
-
-    @staticmethod
-    def parse(url: str | Url, as_string=False):
-        if type(url) is str:
-            url = Url(url)
-        main_url = Url(TribunNewsUrlParser.main_url)
-
-        to_parse = [main_url.scheme,
-                    main_url.netloc,
-                    url.path,
-                    main_url.params,
-                    main_url.query,
-                    main_url.fragment
-                    ]
-        parsed_back = urlunparse(to_parse)
-        # print("parsed_back", type(parsed_back), parsed_back)
-        if as_string:
-            return str(parsed_back)
-        else:
-            return parsed_back
+    def logger(self):
+        return self.__logger
 
 
-class KompasUrlParser():
-    name = "kompas"
-    main_url = "https://kompas.com"
+
+
+
